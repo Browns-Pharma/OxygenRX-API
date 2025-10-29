@@ -3,6 +3,9 @@ info:
   title: 'Oxygen Public API'
   description: 'Public API for third-party integrations with Oxygen. Use your Client ID and Client Secret for authentication.'
   version: '1.0'
+servers:
+  - url: https://app-oxygenrxprod-weu-001-qa.azurewebsites.net
+    description: Production Environment
 paths:
   /api/public/v1/products:
     get:
