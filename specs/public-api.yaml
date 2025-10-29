@@ -1,0 +1,659 @@
+openapi: 3.0.0
+info:
+  title: 'Oxygen Public API'
+  description: 'Public API for third-party integrations with Oxygen. Use your Client ID and Client Secret for authentication.'
+  version: '1.0'
+paths:
+  /api/public/v1/products:
+    get:
+      tags:
+        - 'Public - Products'
+      summary: 'Get Products'
+      operationId: public/getProducts
+      responses:
+        200:
+          description: 'Returns medusa products'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/products/{product_id}':
+    get:
+      tags:
+        - 'Public - Products'
+      summary: 'Get Product By ID'
+      operationId: public/getProductById
+      responses:
+        200:
+          description: 'Returns medusa product'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/treatments:
+    get:
+      tags:
+        - 'Public - Treatments'
+      summary: 'Get All Treatments'
+      operationId: /public/treatments
+      responses:
+        200:
+          description: 'Returns list of treatments'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/prescriptions:
+    post:
+      tags:
+        - 'Public - Prescriptions'
+      summary: 'Create a new draft prescription'
+      operationId: public/createDraftPrescription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                patient_id:
+                  description: 'The ID of the patient'
+                  type: string
+                  minLength: 1
+                  example: '123456'
+                  nullable: false
+                products:
+                  type: array
+                  items:
+                    properties:
+                      treatment_id:
+                        description: 'The ID of the treatment'
+                        type: string
+                        maxLength: 255
+                        example: acfs123
+                        nullable: false
+                      product_id:
+                        description: 'The ID of the product'
+                        type: string
+                        maxLength: 255
+                        example: abc123
+                        nullable: false
+                      product_variant_id:
+                        description: 'The ID of the product variant'
+                        type: string
+                        maxLength: 255
+                        example: xyz456
+                        nullable: false
+                      product_quantity:
+                        description: 'The quantity of the product'
+                        type: integer
+                        minimum: 1
+                        example: 2
+                      instructions:
+                        description: 'Instructions for the prescription'
+                        type: string
+                        maxLength: 255
+                        example: 'Take twice a day'
+                        nullable: false
+                    type: object
+              type: object
+      responses:
+        201:
+          description: 'Draft prescription created'
+        422:
+          description: 'Validation failed'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/prescriptions/{prescription_id}':
+    get:
+      tags:
+        - 'Public - Prescriptions'
+      summary: 'Get a prescription by ID'
+      operationId: public/showPrescription
+      parameters:
+        -
+          name: prescription_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Prescription details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/v1/public/order-lines/{order_line_id}':
+    get:
+      tags:
+        - 'Public - Order Lines'
+      summary: 'Get Organization Order Line By ID'
+      operationId: /public/getOrderLineDetails
+      parameters:
+        -
+          name: order_line_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns order line details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/patients:
+    get:
+      tags:
+        - 'Public - Patients'
+      summary: 'Get All Thirdparty Organization Patients'
+      operationId: /public/patients
+      parameters:
+        -
+          name: search
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+        -
+          name: treatments
+          in: query
+          description: 'Array of statuses ex. treatments[]=hair loss&treatments[]=weight loss'
+          required: false
+          schema:
+            type: string
+        -
+          name: prescription_statuses
+          in: query
+          description: 'Array of statuses ex. prescription_statuses[]=issued&prescription_statuses[]=not in file'
+          required: false
+          schema:
+            type: string
+        -
+          name: per_page
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+        -
+          name: order_by
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+        -
+          name: order
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Returns list of patients'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    post:
+      tags:
+        - 'Public - Patients'
+      summary: 'Create a new patient'
+      description: 'Creates a new patient for the organization.'
+      operationId: 6d726aa28de44a0a78deed9ee4eb8e46
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              patient_id: '23423324'
+              first_name: Johny
+              last_name: Ramos
+              sex: Male
+              birth_date: '1991-01-01'
+              email: johny_ramos@gmail.com
+              phone_number: '+35621234567'
+              address_line_1: '123 Main Street'
+              address_line_2: 'Apartment 4B'
+              city: Valletta
+              post_code: VLT1234
+              country: Malta
+              country_code: MT
+              delivery_address_line_1: '123 Main Street'
+              delivery_address_line_2: 'Apartment 4B'
+              delivery_city: Valletta
+              delivery_post_code: VLT1234
+              delivery_country: Malta
+              delivery_country_code: MT
+              id_number: M12345678
+              allergies:
+                -
+                  allergy: 'skin disease'
+                  date_identified: '2024-05-25'
+                -
+                  allergy: 'eye disease'
+                  date_identified: '2024-07-25'
+              medications:
+                -
+                  medication: Albuterol
+                  dosage: '2.5 mg/3 mL'
+                  quantity: '4-6 hours'
+                  started: '2023-07-25'
+                  expiration: '2030-07-25'
+              problems:
+                -
+                  problem: Headache
+              vitamins:
+                -
+                  vitamin: 'Vitamin C'
+                  reason: 'Boost Immunity'
+              preferences:
+                -
+                  preference: 'No injection'
+              physical_details:
+                -
+                  height: '180'
+                  weight: '180'
+                  date_examined: '2025-07-25'
+      responses:
+        200:
+          description: 'Patient successfully created'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    patch:
+      tags:
+        - 'Public - Patients'
+      summary: 'Update patient'
+      description: 'Update patient of the organization.'
+      operationId: 6814d16e30e73e823ac4e8333cbaa446
+      parameters:
+        -
+          name: organization_id
+          in: path
+          description: 'ID of the organization'
+          required: true
+          schema:
+            type: string
+        -
+          name: patient_id
+          in: path
+          description: 'ID of the patient'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              first_name: Johny
+              last_name: Ramos
+              sex: Male
+              birth_date: '1991-01-01'
+              email: johny_ramos@gmail.com
+              phone_number: '+35621234567'
+              address_line_1: '123 Main Street'
+              address_line_2: 'Apartment 4B'
+              city: Valletta
+              post_code: VLT1234
+              country: Malta
+              country_code: MT
+              delivery_address_line_1: '123 Main Street'
+              delivery_address_line_2: 'Apartment 4B'
+              delivery_city: Valletta
+              delivery_post_code: VLT1234
+              delivery_country: Malta
+              delivery_country_code: MT
+              id_number: M12345678
+              allergies:
+                -
+                  allergy: 'skin disease'
+                  date_identified: '2024-05-25'
+                -
+                  allergy: 'eye disease'
+                  date_identified: '2024-07-25'
+              medications:
+                -
+                  medication: Albuterol
+                  dosage: '2.5 mg/3 mL'
+                  quantity: '4-6 hours'
+                  started: '2023-07-25'
+                  expiration: '2030-07-25'
+              problems:
+                -
+                  problem: Headache
+              vitamins:
+                -
+                  vitamin: 'Vitamin C'
+                  reason: 'Boost Immunity'
+              preferences:
+                -
+                  preference: 'No injection'
+              physical_details:
+                -
+                  height: '180'
+                  weight: '180'
+                  date_examined: '2030-07-25'
+      responses:
+        200:
+          description: 'Patient successfully created'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/patients/{patient_id}':
+    get:
+      tags:
+        - 'Public - Patients'
+      summary: "Get Thirdparty Organization's Patient By ID"
+      operationId: '/public/patients/{patient_id}'
+      parameters:
+        -
+          name: patient_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns patient details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    delete:
+      tags:
+        - 'Public - Patients'
+      summary: 'Delete Patient By Id'
+      operationId: /public/delete/patient
+      parameters:
+        -
+          name: patient_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns success message'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/questionnaires:
+    get:
+      tags:
+        - 'Public - Questionnaires'
+      summary: 'Get All Organization Questionnaires'
+      operationId: /public/all-questionnaires
+      responses:
+        200:
+          description: 'Returns all questionnaires of the organization'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    post:
+      tags:
+        - 'Public - Questionnaires'
+      summary: 'Create Questionnaire'
+      operationId: /public/questionnaires
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              title: 'Weight Loss'
+              slug: weight-loss
+              content:
+                name: eligibility
+                title: 'Eligibility & Consent'
+      responses:
+        200:
+          description: 'Returns questionnaire details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/questionnaires/{questionnaire_id}':
+    get:
+      tags:
+        - 'Public - Questionnaires'
+      summary: 'Get Questionnaire'
+      operationId: public/get-questionnaire
+      parameters:
+        -
+          name: questionnaire_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns questionnaire details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    delete:
+      tags:
+        - 'Public - Questionnaires'
+      summary: 'Delete Questionnaire'
+      operationId: public/delete-questionnaire
+      parameters:
+        -
+          name: questionnaire_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns success message'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    patch:
+      tags:
+        - 'Public - Questionnaires'
+      summary: 'Update Questionnaire'
+      operationId: public/update-questionnaire
+      parameters:
+        -
+          name: questionnaire_id
+          in: path
+          description: ''
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              title: 'Weight Loss'
+              slug: weight-loss
+              content:
+                name: eligibility
+                title: 'Eligibility & Consent'
+      responses:
+        200:
+          description: 'Returns questionnaire details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/questionnaires/{questionnaire_id}/answers':
+    post:
+      tags:
+        - 'Public - Questionnaires'
+      summary: 'Submit Answer'
+      operationId: public/submit-answer
+      parameters:
+        -
+          name: questionnaire_id
+          in: path
+          description: ''
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              answers:
+                name: a
+                title: b
+              patient_id: null
+      responses:
+        200:
+          description: 'Returns answer details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/questionnaire-answers/{answer_id}':
+    get:
+      tags:
+        - 'Public - Questionnaire Answer'
+      summary: 'Get Questionnaire Answer By ID'
+      operationId: public/get-answer
+      parameters:
+        -
+          name: answer_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns answer details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/webhook:
+    get:
+      tags:
+        - 'Public - Webhook'
+      summary: 'Get webhook details'
+      operationId: /public/getWebhookDetails
+      responses:
+        200:
+          description: 'Returns list of treatments'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    post:
+      tags:
+        - 'Public - Webhook'
+      summary: 'Setup Webhook'
+      operationId: /public/setupWebHook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              subscriber_url: '23423324'
+              secret: your-secret-key
+              event_triggers:
+                - ORDER_STATUS_CHANGED
+                - PRESCRIPTION_CREATED
+                - PRESCRIPTION_UPDATED
+                - PRESCRIPTION_STATUS_CHANGED
+                - ORDER_LINE_STATUS_CHANGED
+                - PATIENT_CREATED
+                - PATIENT_UPDATED
+                - PATIENT_DELETED
+              active: true
+      responses:
+        200:
+          description: 'Returns webhook details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/webhook/events:
+    get:
+      tags:
+        - 'Public - Order Lines'
+      summary: 'Get Organization Webhooks Events'
+      operationId: /api/public/v1/webhook/events
+      responses:
+        200:
+          description: 'Returns order line details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+components:
+  securitySchemes:
+    ClientIdAuth:
+      type: apiKey
+      description: 'Client ID required in the header'
+      name: X-CLIENT-ID
+      in: header
+    ClientSecretAuth:
+      type: apiKey
+      description: 'Client Secret required in the header'
+      name: X-CLIENT-SECRET
+      in: header
+tags:
+  -
+    name: 'Public - Products'
+    description: 'Public - Products'
+  -
+    name: 'Public - Treatments'
+    description: 'Public - Treatments'
+  -
+    name: 'Public - Prescriptions'
+    description: 'Public - Prescriptions'
+  -
+    name: 'Public - Order Lines'
+    description: 'Public - Order Lines'
+  -
+    name: 'Public - Patients'
+    description: 'Public - Patients'
+  -
+    name: 'Public - Questionnaires'
+    description: 'Public - Questionnaires'
+  -
+    name: 'Public - Questionnaire Answer'
+    description: 'Public - Questionnaire Answer'
+  -
+    name: 'Public - Webhook'
+    description: 'Public - Webhook'
