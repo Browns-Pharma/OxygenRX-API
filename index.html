@@ -86,9 +86,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
     <script>
         window.onload = function() {
+            // Get the base URL for GitHub Pages
+            const baseUrl = window.location.origin + window.location.pathname.replace(/\/$/, '');
+            const specUrl = baseUrl + '/specs/public-api.yaml';
+
             // Initialize Public API with Scalar
             window.publicApiRef = Scalar.createApiReference('#public-api-docs', {
-                url: './specs/public-api.yaml',
+                url: specUrl,
                 proxyUrl: 'https://proxy.scalar.com'
             });
         };
