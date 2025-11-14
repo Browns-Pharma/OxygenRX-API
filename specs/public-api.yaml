@@ -1,12 +1,141 @@
 openapi: 3.0.0
 info:
-  title: 'Oxygen Public API'
-  description: 'Public API for third-party integrations with Oxygen. Use your Client ID and Client Secret for authentication.'
+  title: 'Oxygen API'
+  description: 'This is an API for frontend Oxygen.'
   version: '1.0'
 servers:
   - url: https://app-oxygenrxprod-weu-001-qa.azurewebsites.net
     description: Production Environment
 paths:
+  /api/public/v1/calcom/my-team:
+    get:
+      tags:
+        - 'Public - Cal.com Team'
+      summary: 'Get My Team Details'
+      operationId: /public/getTeamDetails
+      responses:
+        200:
+          description: 'Returns a team details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/calcom/bookings:
+    get:
+      tags:
+        - 'Public - Cal.com Bookings'
+      summary: 'Get Bookings'
+      operationId: /public/getBookings
+      responses:
+        200:
+          description: 'Returns a team bookings'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/calcom/event-types:
+    get:
+      tags:
+        - 'Public - Cal.com Event Types'
+      summary: 'Get a Team Event Types'
+      operationId: /public/getTeamEventTypes
+      responses:
+        200:
+          description: 'Returns a list of event types'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    post:
+      tags:
+        - 'Public - Cal.com Event Types'
+      summary: 'Create an Event Type'
+      operationId: /public/createTeamEventType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              data: []
+      responses:
+        200:
+          description: 'Returns event details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/calcom/event-types/{event_type_id}':
+    get:
+      tags:
+        - 'Public - Cal.com Event Types'
+      summary: 'Get an Event Type'
+      operationId: /public/getTeamEventType
+      parameters:
+        -
+          name: event_type_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns a list of event types'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    delete:
+      tags:
+        - 'Public - Cal.com Event Types'
+      summary: 'Delete a Team Event Type'
+      operationId: /public/deleteTeamEventType
+      parameters:
+        -
+          name: event_type_id
+          in: path
+          description: ''
+          required: true
+      responses:
+        200:
+          description: 'Returns success message'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    patch:
+      tags:
+        - 'Public - Cal.com Event Types'
+      summary: 'Update a Team Event Type'
+      operationId: /public/updateTeamEventType
+      parameters:
+        -
+          name: event_type_id
+          in: path
+          description: ''
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              data: []
+      responses:
+        200:
+          description: 'Returns event details'
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
   /api/public/v1/products:
     get:
       tags:
@@ -15,7 +144,68 @@ paths:
       operationId: public/getProducts
       responses:
         200:
-          description: 'Returns medusa products'
+          description: 'Returns all the products'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: prod_01K6AT7KPMHT91KBXZ79V728GP
+                    title:
+                      type: string
+                      example: 'ASAP Nitrile Powder Free Gloves Black Medium'
+                    image:
+                      type: string
+                      example: ''
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: '2025-10-05T02:29:15.000000Z'
+                    updated_at:
+                      type: string
+                      format: date-time
+                      example: '2025-10-14T08:30:04.000000Z'
+                    variants:
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            example: variant_01K6AT7M47ZDYWH16XY8JYA6BP
+                          title:
+                            type: string
+                            example: 'ASAP Nitrile Powder Free Gloves Black Medium'
+                          product_id:
+                            type: string
+                            example: prod_01K6AT7KPMHT91KBXZ79V728GP
+                          sku:
+                            type: string
+                            example: '1003'
+                          is_pom:
+                            type: integer
+                            example: 0
+                          can_prescribe:
+                            type: integer
+                            example: 0
+                          can_stock_order:
+                            type: integer
+                            example: 0
+                          is_special:
+                            type: integer
+                            example: 0
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2025-10-05T02:29:15.000000Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2025-10-29T08:30:06.000000Z'
+                        type: object
+                  type: object
       security:
         -
           ClientIdAuth: []
@@ -27,9 +217,76 @@ paths:
         - 'Public - Products'
       summary: 'Get Product By ID'
       operationId: public/getProductById
+      parameters:
+        -
+          name: product_id
+          in: path
+          description: 'The ID of the product'
+          required: true
+          schema:
+            type: string
       responses:
         200:
-          description: 'Returns medusa product'
+          description: 'Returns product details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: string
+                    example: prod_01K6AT7KPMHT91KBXZ79V728GP
+                  title:
+                    type: string
+                    example: 'ASAP Nitrile Powder Free Gloves Black Medium'
+                  image:
+                    type: string
+                    example: ''
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: '2025-10-05T02:29:15.000000Z'
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: '2025-10-14T08:30:04.000000Z'
+                  variants:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          example: variant_01K6AT7M47ZDYWH16XY8JYA6BP
+                        title:
+                          type: string
+                          example: 'ASAP Nitrile Powder Free Gloves Black Medium'
+                        product_id:
+                          type: string
+                          example: prod_01K6AT7KPMHT91KBXZ79V728GP
+                        sku:
+                          type: string
+                          example: '1003'
+                        is_pom:
+                          type: integer
+                          example: 0
+                        can_prescribe:
+                          type: integer
+                          example: 0
+                        can_stock_order:
+                          type: integer
+                          example: 0
+                        is_special:
+                          type: integer
+                          example: 0
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: '2025-10-05T02:29:15.000000Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: '2025-10-29T08:30:06.000000Z'
+                      type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -40,10 +297,69 @@ paths:
       tags:
         - 'Public - Treatments'
       summary: 'Get All Treatments'
-      operationId: /public/treatments
+      operationId: public/getTreatments
       responses:
         200:
           description: 'Returns list of treatments'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: trt_01JV6S6PZ4K492F81J9T1HN9P3
+                    title:
+                      type: string
+                      example: 'Hair Loss'
+                    organization_id:
+                      type: string
+                      example: null
+                      nullable: true
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: '2025-10-05T02:29:27.000000Z'
+                    updated_at:
+                      type: string
+                      format: date-time
+                      example: '2025-10-05T02:29:27.000000Z'
+                    name:
+                      type: string
+                      example: 'Hair Loss'
+                    products:
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            example: prod_01K6AT7SNK4MHX6QEG1YX0T0BE
+                          title:
+                            type: string
+                            example: Alidya
+                          image:
+                            type: string
+                            example: 'https://example.com/image.webp'
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2025-10-05T02:29:15.000000Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2025-10-21T08:30:05.000000Z'
+                          pivot:
+                            properties:
+                              treatment_id:
+                                type: string
+                                example: trt_01JV6S6PZ4K492F81J9T1HN9P3
+                              product_id:
+                                type: string
+                                example: prod_01K6AT7SNK4MHX6QEG1YX0T0BE
+                            type: object
+                        type: object
+                  type: object
       security:
         -
           ClientIdAuth: []
@@ -62,51 +378,223 @@ paths:
             schema:
               properties:
                 patient_id:
-                  description: 'The ID of the patient'
+                  description: 'The UUID of the patient for whom the prescription is being created'
                   type: string
                   minLength: 1
-                  example: '123456'
+                  example: a04ab9bc-624f-4bd2-80f2-c743606b3a74
                   nullable: false
                 products:
+                  description: 'List of products included in the draft prescription'
                   type: array
                   items:
                     properties:
-                      treatment_id:
-                        description: 'The ID of the treatment'
+                      delivery_address_id:
+                        description: 'The uuid of delivery address of the patient'
                         type: string
                         maxLength: 255
-                        example: acfs123
+                        example: dbe48a2f-687e-4d00-867a-73c955c93528
+                        nullable: true
+                      treatment_name:
+                        description: 'The name of the treatment associated with this product'
+                        type: string
+                        maxLength: 255
+                        example: Test
                         nullable: false
                       product_id:
-                        description: 'The ID of the product'
+                        description: 'The unique identifier of the product'
                         type: string
                         maxLength: 255
-                        example: abc123
+                        example: prod_01K6AT7KPMHT91KBXZ79V728GP
                         nullable: false
                       product_variant_id:
-                        description: 'The ID of the product variant'
+                        description: 'The unique identifier of the product variant'
                         type: string
                         maxLength: 255
-                        example: xyz456
+                        example: variant_01K6AT7M47ZDYWH16XY8JYA6BP
                         nullable: false
                       product_quantity:
-                        description: 'The quantity of the product'
+                        description: 'The quantity of this product in the prescription'
                         type: integer
                         minimum: 1
                         example: 2
                       instructions:
-                        description: 'Instructions for the prescription'
+                        description: 'Instructions for the patient on how to take or use the product'
                         type: string
                         maxLength: 255
                         example: 'Take twice a day'
                         nullable: false
+                      questionnaire_answer_id:
+                        description: 'Optional ID linking this product to a questionnaire answer'
+                        type: string
+                        maxLength: 255
+                        example: dbe48a2f-687e-4d00-867a-73c955c93528
+                        nullable: true
                     type: object
               type: object
       responses:
         201:
-          description: 'Draft prescription created'
+          description: 'Draft prescription created successfully'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      order_lines:
+                        description: 'List of order lines created for the draft prescription'
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                              example: 251caac0-7ad7-413b-87e0-c97e65e50f46
+                            order_id:
+                              type: string
+                              format: uuid
+                              example: 830fd0d6-fe60-416e-90a4-325e2c03def7
+                            organization_id:
+                              type: string
+                              format: uuid
+                              example: 8a2ae21d-06ff-4d2c-9ccc-caee710c40e9
+                            patient_id:
+                              type: string
+                              format: uuid
+                              example: 36675b11-540e-45a0-abf0-1ecca1b6bb4c
+                            order_line_type_id:
+                              type: integer
+                              example: 1
+                            product_id:
+                              type: string
+                              example: prod_01K6AT7KPMHT91KBXZ79V728GP
+                            product_variant_id:
+                              type: string
+                              example: variant_01K6AT7M47ZDYWH16XY8JYA6BP
+                            product_quantity:
+                              type: integer
+                              example: 2
+                            delivery_address_id:
+                              type: string
+                              format: uuid
+                              example: b132c1d4-42b5-4f7f-929e-be50e3b464bc
+                            dispensed_by:
+                              type: string
+                              example: null
+                              nullable: true
+                            order_line_status_id:
+                              type: string
+                              example: '1'
+                            prescription_id:
+                              type: string
+                              format: uuid
+                              example: f46bd7f9-1da4-4ad5-aa0b-d3af2187d9d3
+                            imported_prescription_id:
+                              type: string
+                              example: null
+                              nullable: true
+                            risk_level_id:
+                              type: integer
+                              example: 1
+                            dipsense_event_id:
+                              type: string
+                              example: null
+                              nullable: true
+                            medusa_line_item_id:
+                              type: string
+                              example: null
+                              nullable: true
+                            dispense_schedule_id:
+                              type: string
+                              example: null
+                              nullable: true
+                            is_paid:
+                              type: integer
+                              example: 0
+                            is_basket:
+                              type: integer
+                              example: 0
+                            is_prescribed:
+                              type: integer
+                              example: 0
+                            is_rejected_prescriber:
+                              type: integer
+                              example: 0
+                            is_product_change:
+                              type: integer
+                              example: 0
+                            is_refund:
+                              type: integer
+                              example: 0
+                            is_rejected_dispenser:
+                              type: integer
+                              example: 0
+                            is_clinically_checked:
+                              type: integer
+                              example: 0
+                            is_to_be_dispensed:
+                              type: integer
+                              example: 0
+                            is_dispensed:
+                              type: integer
+                              example: 0
+                            is_delivered:
+                              type: integer
+                              example: 0
+                            questionnaire_answer_id:
+                              type: string
+                              example: dbe48a2f-687e-4d00-867a-73c955c93528
+                              nullable: true
+                            user_id:
+                              type: integer
+                              example: null
+                              nullable: true
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: '2025-11-05T14:00:00.000000Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              example: '2025-11-05T14:00:00.000000Z'
+                            status-key:
+                              type: string
+                              example: pending_prescription
+                            status:
+                              type: string
+                              example: 'Pending Prescription'
+                          type: object
+                      order_id:
+                        type: string
+                        format: uuid
+                        example: 830fd0d6-fe60-416e-90a4-325e2c03def7
+                      reference:
+                        type: string
+                        example: PMY-000009
+                      status:
+                        description: 'Overall status of the prescription'
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          key:
+                            type: string
+                            example: pending_prescription
+                          name:
+                            type: string
+                            example: 'Pending Prescription'
+                          created_at:
+                            type: string
+                            format: date-time
+                            example: '2025-10-04T15:07:05.000000Z'
+                          updated_at:
+                            type: string
+                            format: date-time
+                            example: '2025-10-04T15:07:05.000000Z'
+                        type: object
+                    type: object
+                type: object
         422:
-          description: 'Validation failed'
+          description: 'Validation failed or missing required fields'
       security:
         -
           ClientIdAuth: []
@@ -117,37 +605,912 @@ paths:
       tags:
         - 'Public - Prescriptions'
       summary: 'Get a prescription by ID'
-      operationId: public/showPrescription
+      description: 'Returns details of a prescription for the organization.'
+      operationId: publicShowPrescription
       parameters:
         -
           name: prescription_id
           in: path
+          description: 'UUID of the prescription'
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         200:
           description: 'Prescription details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      reference:
+                        type: string
+                      organization_id:
+                        type: string
+                        format: uuid
+                      prescriber_id:
+                        type: string
+                        format: uuid
+                        nullable: true
+                      patient_id:
+                        type: string
+                        format: uuid
+                      status_id:
+                        type: integer
+                      treatment_id:
+                        type: string
+                        format: uuid
+                      product_id:
+                        type: string
+                      product_variant_id:
+                        type: string
+                      product_quantity:
+                        type: integer
+                      instructions:
+                        type: string
+                        nullable: true
+                      is_repeat_request:
+                        type: integer
+                      max_dispense_times:
+                        type: integer
+                        nullable: true
+                      prescription_frequency_id:
+                        type: integer
+                        nullable: true
+                      prescription_duration_id:
+                        type: integer
+                        nullable: true
+                      expiration_date:
+                        type: string
+                        format: date
+                        nullable: true
+                      delivery_address_id:
+                        type: string
+                        format: uuid
+                      prescribe_on:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      is_from_third_party:
+                        type: integer
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      status-key:
+                        type: string
+                      status:
+                        type: string
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
         -
           ClientSecretAuth: []
-  '/api/v1/public/order-lines/{order_line_id}':
+  '/api/public/v1/order-lines/{order_line_id}':
     get:
       tags:
         - 'Public - Order Lines'
       summary: 'Get Organization Order Line By ID'
-      operationId: /public/getOrderLineDetails
+      operationId: public/getOrderLineDetails
       parameters:
         -
           name: order_line_id
           in: path
-          description: ''
+          description: 'The UUID of the order line'
           required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
           description: 'Returns order line details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: fe111e88-3259-4ceb-9cec-b49f4d4546cb
+                      order_id:
+                        type: string
+                        format: uuid
+                        example: 2d85526b-9f46-4ea7-920f-0875f28ecddc
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      patient_id:
+                        type: string
+                        format: uuid
+                        example: 10736c59-283f-492a-aada-81af769cb758
+                      order_line_type_id:
+                        type: integer
+                        example: 1
+                      product_id:
+                        type: string
+                        example: prod_01K6AT7SFJ3162TJKS344D541H
+                      product_variant_id:
+                        type: string
+                        example: variant_01K6AT7P5M563E5V2D3RTCBP51
+                      product_quantity:
+                        type: integer
+                        example: 11
+                      delivery_address_id:
+                        type: string
+                        format: uuid
+                        example: a378e479-88a7-4f58-81e3-8498ca548752
+                      full_delivery_address:
+                        type: string
+                        example: null
+                        nullable: true
+                      dispensed_by:
+                        type: string
+                        example: null
+                        nullable: true
+                      order_line_status_id:
+                        type: integer
+                        example: 2
+                      prescription_id:
+                        type: string
+                        format: uuid
+                        example: 4bd77329-2dd3-4d4d-9e3a-db43de79a9cf
+                      imported_prescription_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      risk_level_id:
+                        type: integer
+                        example: 1
+                      dipsense_event_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      medusa_line_item_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      dispense_schedule_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      is_paid:
+                        type: integer
+                        example: 0
+                      is_basket:
+                        type: integer
+                        example: 0
+                      is_prescribed:
+                        type: integer
+                        example: 1
+                      is_customer_confirmed:
+                        type: integer
+                        example: 1
+                      is_prescriber_confirmed:
+                        type: integer
+                        example: 0
+                      is_rejected_prescriber:
+                        type: integer
+                        example: 0
+                      is_product_change:
+                        type: integer
+                        example: 0
+                      is_refund:
+                        type: integer
+                        example: 0
+                      is_rejected_dispenser:
+                        type: integer
+                        example: 0
+                      is_clinically_checked:
+                        type: integer
+                        example: 0
+                      is_to_be_dispensed:
+                        type: integer
+                        example: 0
+                      is_dispensed:
+                        type: integer
+                        example: 0
+                      is_delivered:
+                        type: integer
+                        example: 0
+                      questionnaire_answer_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      user_id:
+                        type: integer
+                        example: 1588
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-15T22:41:42.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-15T22:50:53.000000Z'
+                      status_key:
+                        type: string
+                        example: prescribed
+                      status:
+                        type: string
+                        example: Prescribed
+                    type: object
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/order-lines/{order_line_id}/accept-product-change':
+    post:
+      tags:
+        - 'Public - Order Lines'
+      summary: 'Accept Product Change'
+      operationId: acceptProductChange
+      parameters:
+        -
+          name: order_line_id
+          in: path
+          description: 'The UUID of the order line'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: 'Returns updated order line after accepting product change'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: fe111e88-3259-4ceb-9cec-b49f4d4546cb
+                      order_id:
+                        type: string
+                        format: uuid
+                        example: 2d85526b-9f46-4ea7-920f-0875f28ecddc
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      patient_id:
+                        type: string
+                        format: uuid
+                        example: 10736c59-283f-492a-aada-81af769cb758
+                      order_line_type_id:
+                        type: integer
+                        example: 1
+                      product_id:
+                        type: string
+                        example: prod_01K6AT7SFJ3162TJKS344D541H
+                      product_variant_id:
+                        type: string
+                        example: variant_01K6AT7P5M563E5V2D3RTCBP51
+                      product_quantity:
+                        type: integer
+                        example: 11
+                      delivery_address_id:
+                        type: string
+                        format: uuid
+                        example: a378e479-88a7-4f58-81e3-8498ca548752
+                      full_delivery_address:
+                        type: string
+                        example: null
+                        nullable: true
+                      dispensed_by:
+                        type: string
+                        example: null
+                        nullable: true
+                      order_line_status_id:
+                        type: integer
+                        example: 11
+                      prescription_id:
+                        type: string
+                        format: uuid
+                        example: 4bd77329-2dd3-4d4d-9e3a-db43de79a9cf
+                      imported_prescription_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      risk_level_id:
+                        type: integer
+                        example: 1
+                      dipsense_event_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      medusa_line_item_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      dispense_schedule_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      is_paid:
+                        type: integer
+                        example: 0
+                      is_basket:
+                        type: integer
+                        example: 0
+                      is_prescribed:
+                        type: integer
+                        example: 0
+                      is_customer_confirmed:
+                        type: integer
+                        example: 1
+                      is_prescriber_confirmed:
+                        type: integer
+                        example: 1
+                      is_rejected_prescriber:
+                        type: integer
+                        example: 0
+                      is_product_change:
+                        type: integer
+                        example: 1
+                      is_refund:
+                        type: integer
+                        example: 0
+                      is_rejected_dispenser:
+                        type: integer
+                        example: 0
+                      is_clinically_checked:
+                        type: integer
+                        example: 0
+                      is_to_be_dispensed:
+                        type: integer
+                        example: 0
+                      is_dispensed:
+                        type: integer
+                        example: 0
+                      is_delivered:
+                        type: integer
+                        example: 0
+                      questionnaire_answer_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      user_id:
+                        type: integer
+                        example: 1588
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-15T22:41:42.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T09:49:34.000000Z'
+                      status_key:
+                        type: string
+                        example: confirmed
+                      status:
+                        type: string
+                        example: Confirmed
+                    type: object
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/order-lines/{order_line_id}/reject-product-change':
+    post:
+      tags:
+        - 'Public - Order Lines'
+      summary: 'Reject Product Change'
+      operationId: rejectByCustomer
+      parameters:
+        -
+          name: order_line_id
+          in: path
+          description: 'The UUID of the order line'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                reason:
+                  type: string
+                  example: ''
+              type: object
+      responses:
+        200:
+          description: 'Returns updated order line after rejecting product change'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: fe111e88-3259-4ceb-9cec-b49f4d4546cb
+                      order_id:
+                        type: string
+                        format: uuid
+                        example: 2d85526b-9f46-4ea7-920f-0875f28ecddc
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      patient_id:
+                        type: string
+                        format: uuid
+                        example: 10736c59-283f-492a-aada-81af769cb758
+                      order_line_type_id:
+                        type: integer
+                        example: 1
+                      product_id:
+                        type: string
+                        example: prod_01K6AT7SFJ3162TJKS344D541H
+                      product_variant_id:
+                        type: string
+                        example: variant_01K6AT7P5M563E5V2D3RTCBP51
+                      product_quantity:
+                        type: integer
+                        example: 11
+                      delivery_address_id:
+                        type: string
+                        format: uuid
+                        example: a378e479-88a7-4f58-81e3-8498ca548752
+                      full_delivery_address:
+                        type: string
+                        example: null
+                        nullable: true
+                      dispensed_by:
+                        type: string
+                        example: null
+                        nullable: true
+                      order_line_status_id:
+                        type: integer
+                        example: 11
+                      prescription_id:
+                        type: string
+                        format: uuid
+                        example: 4bd77329-2dd3-4d4d-9e3a-db43de79a9cf
+                      imported_prescription_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      risk_level_id:
+                        type: integer
+                        example: 1
+                      dipsense_event_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      medusa_line_item_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      dispense_schedule_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      is_paid:
+                        type: integer
+                        example: 0
+                      is_basket:
+                        type: integer
+                        example: 0
+                      is_prescribed:
+                        type: integer
+                        example: 0
+                      is_customer_confirmed:
+                        type: integer
+                        example: 1
+                      is_prescriber_confirmed:
+                        type: integer
+                        example: 1
+                      is_rejected_prescriber:
+                        type: integer
+                        example: 0
+                      is_product_change:
+                        type: integer
+                        example: 1
+                      is_refund:
+                        type: integer
+                        example: 0
+                      is_rejected_dispenser:
+                        type: integer
+                        example: 0
+                      is_clinically_checked:
+                        type: integer
+                        example: 0
+                      is_to_be_dispensed:
+                        type: integer
+                        example: 0
+                      is_dispensed:
+                        type: integer
+                        example: 0
+                      is_delivered:
+                        type: integer
+                        example: 0
+                      questionnaire_answer_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      user_id:
+                        type: integer
+                        example: 1588
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-15T22:41:42.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T09:49:34.000000Z'
+                      status_key:
+                        type: string
+                        example: confirmed
+                      status:
+                        type: string
+                        example: Confirmed
+                    type: object
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  /api/public/v1/delivery-address:
+    get:
+      tags:
+        - 'Public - Organization Delivery Address'
+      summary: 'Get delivery addresses for organization.'
+      operationId: 7da1d34027c42c053f0bad7e1a1e5cbf
+      responses:
+        200:
+          description: 'Returns organization delivery addresses'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: 1aa0d7b1-e469-4789-82f8-d1965741b49a
+                        organization_id:
+                          type: string
+                          format: uuid
+                          example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                        name:
+                          type: string
+                          example: 'Work 3'
+                        address_line_1:
+                          type: string
+                          example: '12 Oakwood Drive'
+                        address_line_2:
+                          type: string
+                          example: null
+                          nullable: true
+                        city:
+                          type: string
+                          example: Manchester
+                        post_code:
+                          type: string
+                          example: 'M14 5JP'
+                        country:
+                          type: string
+                          example: 'United Kingdom'
+                        country_code:
+                          type: string
+                          example: GB
+                        is_default:
+                          type: boolean
+                          example: false
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: '2025-11-13T17:32:50.000000Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: '2025-11-13T18:25:57.000000Z'
+                        deleted_at:
+                          type: string
+                          format: date-time
+                          example: null
+                          nullable: true
+                      type: object
+                type: object
+              example:
+                data:
+                  -
+                    id: 1aa0d7b1-e469-4789-82f8-d1965741b49a
+                    organization_id: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                    name: 'Work 3'
+                    address_line_1: '12 Oakwood Drive'
+                    address_line_2: null
+                    city: Manchester
+                    post_code: 'M14 5JP'
+                    country: 'United Kingdom'
+                    country_code: GB
+                    is_default: false
+                    created_at: '2025-11-13T17:32:50.000000Z'
+                    updated_at: '2025-11-13T18:25:57.000000Z'
+                    deleted_at: null
+                  -
+                    id: 1c01aac7-43eb-4075-a3a5-135fe0282061
+                    organization_id: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                    name: 'Office 3'
+                    address_line_1: '16 Oakwood Drive'
+                    address_line_2: null
+                    city: Manchester
+                    post_code: 'M14 5JP'
+                    country: 'United Kingdom'
+                    country_code: GB
+                    is_default: false
+                    created_at: '2025-11-13T13:36:49.000000Z'
+                    updated_at: '2025-11-13T13:36:49.000000Z'
+                    deleted_at: null
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    post:
+      tags:
+        - 'Public - Organization Delivery Address'
+      summary: 'Creates a new delivery address for organization.'
+      operationId: e57af473db5de8d80b3ab2b83621f5f5
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - delivery_address_line_1
+                - delivery_city
+                - delivery_post_code
+                - delivery_country_code
+              properties:
+                name:
+                  type: string
+                  example: 'Office 3'
+                delivery_address_line_1:
+                  type: string
+                  example: '16 Oakwood Drive'
+                delivery_address_line_2:
+                  type: string
+                  example: ''
+                delivery_city:
+                  type: string
+                  example: Manchester
+                delivery_post_code:
+                  type: string
+                  example: 'M14 5JP'
+                delivery_country_code:
+                  type: string
+                  example: GB
+                is_default:
+                  type: boolean
+                  example: false
+              type: object
+      responses:
+        200:
+          description: 'Organization delivery address successfully created'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      address_line_1:
+                        type: string
+                        example: '16 Oakwood Drive'
+                      address_line_2:
+                        type: string
+                        example: null
+                        nullable: true
+                      city:
+                        type: string
+                        example: Manchester
+                      post_code:
+                        type: string
+                        example: 'M14 5JP'
+                      country:
+                        type: string
+                        example: 'United Kingdom'
+                      country_code:
+                        type: string
+                        example: GB
+                      is_default:
+                        type: boolean
+                        example: false
+                      name:
+                        type: string
+                        example: 'Office 3'
+                      id:
+                        type: string
+                        format: uuid
+                        example: 1aa0d7b1-e469-4789-82f8-d1965741b49a
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-13T17:32:50.000000Z'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-13T17:32:50.000000Z'
+                    type: object
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/delivery-address/{delivery_address_id}':
+    delete:
+      tags:
+        - 'Public - Organization Delivery Address'
+      summary: 'Delete delivery address of organization.'
+      operationId: 260833d2c452a4435758c48c7d4a6db1
+      parameters:
+        -
+          name: delivery_address_id
+          in: path
+          description: 'The UUID of the delivery address to delete'
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1aa0d7b1-e469-4789-82f8-d1965741b49a
+      responses:
+        200:
+          description: 'Organization delivery address successfully deleted'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: success
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    patch:
+      tags:
+        - 'Public - Organization Delivery Address'
+      summary: 'Update delivery address of organization.'
+      operationId: 98c70bb579f8622a83272a54966ebd8e
+      parameters:
+        -
+          name: delivery_address_id
+          in: path
+          description: 'The UUID of the delivery address to update'
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 1aa0d7b1-e469-4789-82f8-d1965741b49a
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - delivery_address_line_1
+                - delivery_city
+                - delivery_post_code
+                - delivery_country_code
+              properties:
+                name:
+                  type: string
+                  example: 'Work 3'
+                delivery_address_line_1:
+                  type: string
+                  example: '12 Oakwood Drive'
+                delivery_address_line_2:
+                  type: string
+                  example: null
+                  nullable: true
+                delivery_city:
+                  type: string
+                  example: Manchester
+                delivery_post_code:
+                  type: string
+                  example: 'M14 5JP'
+                delivery_country_code:
+                  type: string
+                  example: GB
+                is_default:
+                  type: boolean
+                  example: false
+              type: object
+      responses:
+        200:
+          description: 'Organization delivery address successfully updated'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 1aa0d7b1-e469-4789-82f8-d1965741b49a
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      name:
+                        type: string
+                        example: 'Work 3'
+                      address_line_1:
+                        type: string
+                        example: '12 Oakwood Drive'
+                      address_line_2:
+                        type: string
+                        example: null
+                        nullable: true
+                      city:
+                        type: string
+                        example: Manchester
+                      post_code:
+                        type: string
+                        example: 'M14 5JP'
+                      country:
+                        type: string
+                        example: 'United Kingdom'
+                      country_code:
+                        type: string
+                        example: GB
+                      is_default:
+                        type: boolean
+                        example: false
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-13T17:32:50.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-13T18:25:57.000000Z'
+                      deleted_at:
+                        type: string
+                        format: date-time
+                        example: null
+                        nullable: true
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -157,54 +1520,127 @@ paths:
     get:
       tags:
         - 'Public - Patients'
-      summary: 'Get All Thirdparty Organization Patients'
-      operationId: /public/patients
+      summary: 'Get all Patients from a Third-Party Organization'
+      operationId: publicGetPatients
       parameters:
         -
           name: search
           in: query
-          description: ''
-          required: false
-          schema:
-            type: string
-        -
-          name: treatments
-          in: query
-          description: 'Array of statuses ex. treatments[]=hair loss&treatments[]=weight loss'
-          required: false
-          schema:
-            type: string
-        -
-          name: prescription_statuses
-          in: query
-          description: 'Array of statuses ex. prescription_statuses[]=issued&prescription_statuses[]=not in file'
+          description: 'Search by patient name, email, phone number, or reference'
           required: false
           schema:
             type: string
         -
           name: per_page
           in: query
-          description: ''
+          description: 'Number of results per page (default: 10)'
           required: false
           schema:
-            type: string
+            type: integer
         -
           name: order_by
           in: query
-          description: ''
+          description: 'Column to order by. Example: created_at, last_order'
           required: false
           schema:
             type: string
         -
           name: order
           in: query
-          description: ''
+          description: 'Sort direction (asc or desc)'
           required: false
           schema:
             type: string
+            enum:
+              - asc
+              - desc
       responses:
         200:
-          description: 'Returns list of patients'
+          description: 'Returns paginated list of patients'
+          content:
+            application/json:
+              schema:
+                properties:
+                  current_page:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        organization_id:
+                          type: string
+                          format: uuid
+                        request_patient_id:
+                          type: string
+                          format: uuid
+                        reference:
+                          type: string
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                        sex:
+                          type: string
+                        birth_date:
+                          type: string
+                          format: date
+                        email:
+                          type: string
+                        phone_number:
+                          type: string
+                        id_document_type:
+                          type: string
+                          nullable: true
+                        id_number:
+                          type: string
+                        latest_prescription_id:
+                          type: string
+                          format: uuid
+                          nullable: true
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                        deleted_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        document_type:
+                          type: string
+                          nullable: true
+                        last_order:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        treatments:
+                          type: array
+                          items:
+                            type: string
+                        patient_name:
+                          type: string
+                      type: object
+                  first_page_url:
+                    type: string
+                  last_page:
+                    type: integer
+                  last_page_url:
+                    type: string
+                  next_page_url:
+                    type: string
+                    nullable: true
+                  prev_page_url:
+                    type: string
+                    nullable: true
+                  per_page:
+                    type: integer
+                  total:
+                    type: integer
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -221,60 +1657,554 @@ paths:
         content:
           application/json:
             schema:
+              properties:
+                patient_id:
+                  type: string
+                  example: '23423324'
+                first_name:
+                  type: string
+                  example: Johny
+                last_name:
+                  type: string
+                  example: Ramos
+                sex:
+                  type: string
+                  example: Male
+                birth_date:
+                  type: string
+                  format: date
+                  example: '1991-01-01'
+                email:
+                  type: string
+                  example: johny_ramos@gmail.com
+                phone_number:
+                  type: string
+                  example: '+35621234567'
+                address_line_1:
+                  type: string
+                  example: '123 Main Street'
+                address_line_2:
+                  type: string
+                  example: 'Apartment 4B'
+                  nullable: true
+                city:
+                  type: string
+                  example: Valletta
+                post_code:
+                  type: string
+                  example: VLT1234
+                country_code:
+                  type: string
+                  example: MT
+                delivery_address_line_1:
+                  type: string
+                  example: '123 Main Street'
+                delivery_address_line_2:
+                  type: string
+                  example: 'Apartment 4B'
+                  nullable: true
+                delivery_city:
+                  type: string
+                  example: Valletta
+                delivery_post_code:
+                  type: string
+                  example: VLT1234
+                delivery_country_code:
+                  type: string
+                  example: MT
+                id_number:
+                  type: string
+                  example: M12345678
+                allergies:
+                  type: array
+                  items:
+                    properties:
+                      allergy:
+                        type: string
+                        example: 'skin disease'
+                      date_identified:
+                        type: string
+                        format: date
+                        example: '2024-05-25'
+                    type: object
+                medications:
+                  type: array
+                  items:
+                    properties:
+                      medication:
+                        type: string
+                        example: Albuterol
+                      dosage:
+                        type: string
+                        example: '2.5 mg/3 mL'
+                      quantity:
+                        type: string
+                        example: '4-6 hours'
+                      started:
+                        type: string
+                        format: date
+                        example: '2023-07-25'
+                      expiration:
+                        type: string
+                        format: date
+                        example: '2030-07-25'
+                    type: object
+                problems:
+                  type: array
+                  items:
+                    properties:
+                      problem:
+                        type: string
+                        example: Headache
+                    type: object
+                vitamins:
+                  type: array
+                  items:
+                    properties:
+                      vitamin:
+                        type: string
+                        example: 'Vitamin C'
+                      reason:
+                        type: string
+                        example: 'Boost Immunity'
+                    type: object
+                preferences:
+                  type: array
+                  items:
+                    properties:
+                      preference:
+                        type: string
+                        example: 'No injection'
+                    type: object
+                physical_details:
+                  type: array
+                  items:
+                    properties:
+                      height:
+                        type: string
+                        example: '180'
+                      weight:
+                        type: string
+                        example: '180'
+                      date_examined:
+                        type: string
+                        format: date
+                        example: '2025-07-25'
+                    type: object
               type: object
-            example:
-              patient_id: '23423324'
-              first_name: Johny
-              last_name: Ramos
-              sex: Male
-              birth_date: '1991-01-01'
-              email: johny_ramos@gmail.com
-              phone_number: '+35621234567'
-              address_line_1: '123 Main Street'
-              address_line_2: 'Apartment 4B'
-              city: Valletta
-              post_code: VLT1234
-              country: Malta
-              country_code: MT
-              delivery_address_line_1: '123 Main Street'
-              delivery_address_line_2: 'Apartment 4B'
-              delivery_city: Valletta
-              delivery_post_code: VLT1234
-              delivery_country: Malta
-              delivery_country_code: MT
-              id_number: M12345678
-              allergies:
-                -
-                  allergy: 'skin disease'
-                  date_identified: '2024-05-25'
-                -
-                  allergy: 'eye disease'
-                  date_identified: '2024-07-25'
-              medications:
-                -
-                  medication: Albuterol
-                  dosage: '2.5 mg/3 mL'
-                  quantity: '4-6 hours'
-                  started: '2023-07-25'
-                  expiration: '2030-07-25'
-              problems:
-                -
-                  problem: Headache
-              vitamins:
-                -
-                  vitamin: 'Vitamin C'
-                  reason: 'Boost Immunity'
-              preferences:
-                -
-                  preference: 'No injection'
-              physical_details:
-                -
-                  height: '180'
-                  weight: '180'
-                  date_examined: '2025-07-25'
       responses:
         200:
           description: 'Patient successfully created'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      organization_id:
+                        type: string
+                        format: uuid
+                      request_patient_id:
+                        type: string
+                        format: uuid
+                      reference:
+                        type: string
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      sex:
+                        type: string
+                      birth_date:
+                        type: string
+                        format: date
+                      email:
+                        type: string
+                      phone_number:
+                        type: string
+                      id_document_type:
+                        type: string
+                        nullable: true
+                      id_number:
+                        type: string
+                      latest_prescription_id:
+                        type: string
+                        format: uuid
+                        nullable: true
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      deleted_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      document_type:
+                        type: string
+                        nullable: true
+                      addresses:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            organization_id:
+                              type: string
+                            patient_id:
+                              type: string
+                            address_line_1:
+                              type: string
+                            address_line_2:
+                              type: string
+                              nullable: true
+                            city:
+                              type: string
+                            post_code:
+                              type: string
+                            country:
+                              type: string
+                            country_code:
+                              type: string
+                            is_default:
+                              type: boolean
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                          type: object
+                      delivery_addresses:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: string
+                            organization_id:
+                              type: string
+                            patient_id:
+                              type: string
+                            name:
+                              type: string
+                              nullable: true
+                            address_line_1:
+                              type: string
+                            address_line_2:
+                              type: string
+                              nullable: true
+                            city:
+                              type: string
+                            post_code:
+                              type: string
+                            country:
+                              type: string
+                            country_code:
+                              type: string
+                            is_default:
+                              type: boolean
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                            deleted_at:
+                              type: string
+                              format: date-time
+                              nullable: true
+                          type: object
+                      allergies:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            allergy:
+                              type: string
+                            date_identified:
+                              type: string
+                              format: date
+                          type: object
+                      medications:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            medication:
+                              type: string
+                            dosage:
+                              type: string
+                            quantity:
+                              type: string
+                            started:
+                              type: string
+                              format: date
+                            expiration:
+                              type: string
+                              format: date
+                          type: object
+                      problems:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            problem:
+                              type: string
+                          type: object
+                      vitamins:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            vitamin:
+                              type: string
+                            reason:
+                              type: string
+                          type: object
+                      preferences:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            preference:
+                              type: string
+                          type: object
+                      physical_details:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            height:
+                              type: string
+                            weight:
+                              type: string
+                            bmi:
+                              type: string
+                            date_examined:
+                              type: string
+                              format: date
+                          type: object
+                    type: object
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+  '/api/public/v1/patients/{patient_id}':
+    get:
+      tags:
+        - 'Public - Patients'
+      summary: "Get Third Party Organization's Patient By ID"
+      operationId: publicGetPatientById
+      parameters:
+        -
+          name: patient_id
+          in: path
+          description: 'Patient ID'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: 'Returns patient details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      organization_id:
+                        type: string
+                        format: uuid
+                      request_patient_id:
+                        type: string
+                        format: uuid
+                        nullable: true
+                      reference:
+                        type: string
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      sex:
+                        type: string
+                      birth_date:
+                        type: string
+                        format: date
+                      email:
+                        type: string
+                        format: email
+                        nullable: true
+                      phone_number:
+                        type: string
+                      id_document_type:
+                        type: string
+                        nullable: true
+                      id_number:
+                        type: string
+                        nullable: true
+                      latest_prescription_id:
+                        type: string
+                        format: uuid
+                        nullable: true
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      deleted_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      document_type:
+                        type: string
+                        nullable: true
+                      addresses:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            organization_id:
+                              type: string
+                              format: uuid
+                            patient_id:
+                              type: string
+                              format: uuid
+                            address_line_1:
+                              type: string
+                            address_line_2:
+                              type: string
+                              nullable: true
+                            city:
+                              type: string
+                            post_code:
+                              type: string
+                            country:
+                              type: string
+                            country_code:
+                              type: string
+                            is_default:
+                              type: boolean
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                          type: object
+                      delivery_addresses:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            organization_id:
+                              type: string
+                              format: uuid
+                            patient_id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                            address_line_1:
+                              type: string
+                            address_line_2:
+                              type: string
+                              nullable: true
+                            city:
+                              type: string
+                            post_code:
+                              type: string
+                            country:
+                              type: string
+                            country_code:
+                              type: string
+                            is_default:
+                              type: boolean
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                            deleted_at:
+                              type: string
+                              format: date-time
+                              nullable: true
+                          type: object
+                      allergies:
+                        type: array
+                        items:
+                          type: object
+                      medications:
+                        type: array
+                        items:
+                          type: object
+                      problems:
+                        type: array
+                        items:
+                          type: object
+                      vitamins:
+                        type: array
+                        items:
+                          type: object
+                      preferences:
+                        type: array
+                        items:
+                          type: object
+                      physical_details:
+                        type: array
+                        items:
+                          type: object
+                    type: object
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    delete:
+      tags:
+        - 'Public - Patients'
+      summary: 'Delete patient'
+      description: 'Soft deletes a patient belonging to the organization.'
+      operationId: publicDeletePatient
+      parameters:
+        -
+          name: patient_id
+          in: path
+          description: 'UUID of the patient to delete'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: 'Patient successfully deleted'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: success
       security:
         -
           ClientIdAuth: []
@@ -285,15 +2215,8 @@ paths:
         - 'Public - Patients'
       summary: 'Update patient'
       description: 'Update patient of the organization.'
-      operationId: 6814d16e30e73e823ac4e8333cbaa446
+      operationId: 81b41bbca5f16942b9935add81ea904a
       parameters:
-        -
-          name: organization_id
-          in: path
-          description: 'ID of the organization'
-          required: true
-          schema:
-            type: string
         -
           name: patient_id
           in: path
@@ -301,103 +2224,497 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         required: true
         content:
           application/json:
             schema:
+              properties:
+                patient_id:
+                  type: string
+                  example: '23423324'
+                first_name:
+                  type: string
+                  example: Johny
+                last_name:
+                  type: string
+                  example: Ramos
+                sex:
+                  type: string
+                  example: Male
+                birth_date:
+                  type: string
+                  format: date
+                  example: '1991-01-01'
+                email:
+                  type: string
+                  example: johny_ramos@gmail.com
+                phone_number:
+                  type: string
+                  example: '+35621234567'
+                address_line_1:
+                  type: string
+                  example: '123 Main Street'
+                address_line_2:
+                  type: string
+                  example: 'Apartment 4B'
+                  nullable: true
+                city:
+                  type: string
+                  example: Valletta
+                post_code:
+                  type: string
+                  example: VLT1234
+                country_code:
+                  type: string
+                  example: MT
+                delivery_address_line_1:
+                  type: string
+                  example: '123 Main Street'
+                delivery_address_line_2:
+                  type: string
+                  example: 'Apartment 4B'
+                  nullable: true
+                delivery_city:
+                  type: string
+                  example: Valletta
+                delivery_post_code:
+                  type: string
+                  example: VLT1234
+                delivery_country_code:
+                  type: string
+                  example: MT
+                id_number:
+                  type: string
+                  example: M12345678
               type: object
-            example:
-              first_name: Johny
-              last_name: Ramos
-              sex: Male
-              birth_date: '1991-01-01'
-              email: johny_ramos@gmail.com
-              phone_number: '+35621234567'
-              address_line_1: '123 Main Street'
-              address_line_2: 'Apartment 4B'
-              city: Valletta
-              post_code: VLT1234
-              country: Malta
-              country_code: MT
-              delivery_address_line_1: '123 Main Street'
-              delivery_address_line_2: 'Apartment 4B'
-              delivery_city: Valletta
-              delivery_post_code: VLT1234
-              delivery_country: Malta
-              delivery_country_code: MT
-              id_number: M12345678
-              allergies:
-                -
-                  allergy: 'skin disease'
-                  date_identified: '2024-05-25'
-                -
-                  allergy: 'eye disease'
-                  date_identified: '2024-07-25'
-              medications:
-                -
-                  medication: Albuterol
-                  dosage: '2.5 mg/3 mL'
-                  quantity: '4-6 hours'
-                  started: '2023-07-25'
-                  expiration: '2030-07-25'
-              problems:
-                -
-                  problem: Headache
-              vitamins:
-                -
-                  vitamin: 'Vitamin C'
-                  reason: 'Boost Immunity'
-              preferences:
-                -
-                  preference: 'No injection'
-              physical_details:
-                -
-                  height: '180'
-                  weight: '180'
-                  date_examined: '2030-07-25'
       responses:
         200:
-          description: 'Patient successfully created'
+          description: 'Patient successfully updated'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      organization_id:
+                        type: string
+                        format: uuid
+                      request_patient_id:
+                        type: string
+                        format: uuid
+                        nullable: true
+                      reference:
+                        type: string
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      sex:
+                        type: string
+                      birth_date:
+                        type: string
+                        format: date
+                      email:
+                        type: string
+                        format: email
+                        nullable: true
+                      phone_number:
+                        type: string
+                      id_document_type:
+                        type: string
+                        nullable: true
+                      id_number:
+                        type: string
+                        nullable: true
+                      latest_prescription_id:
+                        type: string
+                        format: uuid
+                        nullable: true
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      deleted_at:
+                        type: string
+                        nullable: true
+                      document_type:
+                        type: string
+                        nullable: true
+                      addresses:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            organization_id:
+                              type: string
+                              format: uuid
+                            patient_id:
+                              type: string
+                              format: uuid
+                            address_line_1:
+                              type: string
+                            address_line_2:
+                              type: string
+                              nullable: true
+                            city:
+                              type: string
+                            post_code:
+                              type: string
+                            country:
+                              type: string
+                            country_code:
+                              type: string
+                            is_default:
+                              type: boolean
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                          type: object
+                      delivery_addresses:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            organization_id:
+                              type: string
+                              format: uuid
+                            patient_id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                            address_line_1:
+                              type: string
+                            address_line_2:
+                              type: string
+                              nullable: true
+                            city:
+                              type: string
+                            post_code:
+                              type: string
+                            country:
+                              type: string
+                            country_code:
+                              type: string
+                            is_default:
+                              type: boolean
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                            deleted_at:
+                              type: string
+                              format: date-time
+                              nullable: true
+                          type: object
+                      allergies:
+                        type: array
+                        items:
+                          type: object
+                      medications:
+                        type: array
+                        items:
+                          type: object
+                      problems:
+                        type: array
+                        items:
+                          type: object
+                      vitamins:
+                        type: array
+                        items:
+                          type: object
+                      preferences:
+                        type: array
+                        items:
+                          type: object
+                      physical_details:
+                        type: array
+                        items:
+                          type: object
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
         -
           ClientSecretAuth: []
-  '/api/public/v1/patients/{patient_id}':
-    get:
+  '/api/public/v1/patients/{patient_id}/delivery-address':
+    post:
       tags:
         - 'Public - Patients'
-      summary: "Get Thirdparty Organization's Patient By ID"
-      operationId: '/public/patients/{patient_id}'
+      summary: 'Creates a new delivery address for a patient.'
+      operationId: a7a33f64551ddd46dcef7fcaa53a53f9
       parameters:
         -
           name: patient_id
           in: path
-          description: ''
+          description: 'The UUID of the patient'
           required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - delivery_address_line_1
+                - delivery_city
+                - delivery_post_code
+                - delivery_country_code
+              properties:
+                name:
+                  type: string
+                  example: Home
+                delivery_address_line_1:
+                  type: string
+                  example: '123 Main Street'
+                delivery_address_line_2:
+                  type: string
+                  example: 'Apartment 4B'
+                  nullable: true
+                delivery_city:
+                  type: string
+                  example: Valletta
+                delivery_post_code:
+                  type: string
+                  example: VLT1234
+                delivery_country_code:
+                  type: string
+                  example: MT
+                is_default:
+                  type: boolean
+                  example: false
+              type: object
       responses:
         200:
-          description: 'Returns patient details'
+          description: 'Patient address successfully created'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 59bc316d-d325-4c19-8728-1ccdcb8fdc23
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      patient_id:
+                        type: string
+                        format: uuid
+                        example: 33dda447-584f-4ec8-a7d1-2da87cc9ece0
+                      address_line_1:
+                        type: string
+                        example: '12 Oakwood Drive'
+                      address_line_2:
+                        type: string
+                        example: null
+                        nullable: true
+                      city:
+                        type: string
+                        example: Manchester
+                      post_code:
+                        type: string
+                        example: 'M14 5JP'
+                      country:
+                        type: string
+                        example: 'United Kingdom'
+                      country_code:
+                        type: string
+                        example: GB
+                      is_default:
+                        type: boolean
+                        example: false
+                      name:
+                        type: string
+                        example: 'Home address'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T08:13:05.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T08:13:05.000000Z'
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
         -
           ClientSecretAuth: []
+  '/api/public/v1/patients/{patient_id}/delivery-address/{delivery_address_id}':
     delete:
       tags:
         - 'Public - Patients'
-      summary: 'Delete Patient By Id'
-      operationId: /public/delete/patient
+      summary: 'Delete delivery address of patient.'
+      operationId: 01d1630eabee1bee38ead0f3644dcacd
       parameters:
         -
           name: patient_id
           in: path
-          description: ''
+          description: 'The UUID of the patient'
           required: true
+          schema:
+            type: string
+            format: uuid
+        -
+          name: delivery_address_id
+          in: path
+          description: 'The UUID of the delivery address'
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
-          description: 'Returns success message'
+          description: 'Patient address successfully deleted'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: success
+                type: object
+      security:
+        -
+          ClientIdAuth: []
+        -
+          ClientSecretAuth: []
+    patch:
+      tags:
+        - 'Public - Patients'
+      summary: 'Update delivery address of patient.'
+      operationId: b0f3f6c7ccedd569e714f7f65f60bb6f
+      parameters:
+        -
+          name: patient_id
+          in: path
+          description: 'The UUID of the patient'
+          required: true
+          schema:
+            type: string
+            format: uuid
+        -
+          name: delivery_address_id
+          in: path
+          description: 'The UUID of the delivery address'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  example: Home
+                delivery_address_line_1:
+                  type: string
+                  example: '123 Main Street'
+                delivery_address_line_2:
+                  type: string
+                  example: 'Apartment 4B'
+                  nullable: true
+                delivery_city:
+                  type: string
+                  example: Valletta
+                delivery_post_code:
+                  type: string
+                  example: VLT1234
+                delivery_country_code:
+                  type: string
+                  example: MT
+                is_default:
+                  type: boolean
+                  example: false
+              type: object
+      responses:
+        200:
+          description: 'Patient address successfully updated'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: ae3e468f-50dd-430a-9fa2-aa3b61d22548
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      patient_id:
+                        type: string
+                        format: uuid
+                        example: 7689e657-287a-4e47-b682-1dd9010e3cf1
+                      name:
+                        type: string
+                        example: 'Work 3'
+                      address_line_1:
+                        type: string
+                        example: '12 Oakwood Drive'
+                      address_line_2:
+                        type: string
+                        example: 'Block B, Apt 7'
+                        nullable: true
+                      city:
+                        type: string
+                        example: Manchester
+                      post_code:
+                        type: string
+                        example: 'M14 5JP'
+                      country:
+                        type: string
+                        example: 'United Kingdom'
+                      country_code:
+                        type: string
+                        example: GB
+                      is_default:
+                        type: boolean
+                        example: false
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-07T16:06:38.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T08:17:22.000000Z'
+                      deleted_at:
+                        type: string
+                        format: date-time
+                        example: null
+                        nullable: true
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -409,9 +2726,141 @@ paths:
         - 'Public - Questionnaires'
       summary: 'Get All Organization Questionnaires'
       operationId: /public/all-questionnaires
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Page number for pagination (default: 1)'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Number of items per page (default: 10)'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: search
+          in: query
+          description: 'Search term to filter questionnaires by title or content'
+          required: false
+          schema:
+            type: string
+        -
+          name: order_by
+          in: query
+          description: 'Field to sort by (default: created_at). Options: id, title, created_at, slug'
+          required: false
+          schema:
+            type: string
+            default: created_at
+        -
+          name: order
+          in: query
+          description: 'Sort direction (default: asc). Options: asc, desc'
+          required: false
+          schema:
+            type: string
+            default: asc
       responses:
         200:
-          description: 'Returns all questionnaires of the organization'
+          description: 'Returns a paginated list of questionnaires for the organization'
+          content:
+            application/json:
+              schema:
+                properties:
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: efa20b8b-cedb-4c70-a683-7e5ba67af43c
+                        organization_id:
+                          type: string
+                          format: uuid
+                          example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                        title:
+                          type: string
+                          example: 'weight loss'
+                        slug:
+                          type: string
+                          example: weight-loss
+                        content:
+                          description: 'Flexible JSON content stored for the questionnaire'
+                          type: object
+                          example:
+                            slug: weight-loss
+                            title: 'Weight Loss'
+                            content:
+                              name: eligibility
+                              title: 'Eligibility & Consent'
+                          additionalProperties: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: '2025-10-24T22:26:14.000000Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: '2025-10-24T22:26:14.000000Z'
+                      type: object
+                  first_page_url:
+                    type: string
+                    example: 'https://pmr-api.test/api/public/v1/questionnaires?page=1'
+                  from:
+                    type: integer
+                    example: 1
+                  last_page:
+                    type: integer
+                    example: 1
+                  last_page_url:
+                    type: string
+                    example: 'https://pmr-api.test/api/public/v1/questionnaires?page=1'
+                  links:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          example: null
+                          nullable: true
+                        label:
+                          type: string
+                          example: '&laquo; Previous'
+                        active:
+                          type: boolean
+                          example: false
+                      type: object
+                  next_page_url:
+                    type: string
+                    example: null
+                    nullable: true
+                  path:
+                    type: string
+                    example: 'https://pmr-api.test/api/public/v1/questionnaires'
+                  per_page:
+                    type: integer
+                    example: 10
+                  prev_page_url:
+                    type: string
+                    example: null
+                    nullable: true
+                  to:
+                    type: integer
+                    example: 1
+                  total:
+                    type: integer
+                    example: 1
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -420,23 +2869,54 @@ paths:
     post:
       tags:
         - 'Public - Questionnaires'
-      summary: 'Create Questionnaire'
+      summary: 'Create a new questionnaire'
       operationId: /public/questionnaires
       requestBody:
         required: true
         content:
           application/json:
             schema:
+              properties:
+                title:
+                  description: 'The title of the questionnaire'
+                  type: string
+                  example: 'Weight Loss'
+                slug:
+                  description: 'The slug for the questionnaire'
+                  type: string
+                  example: weight-loss
+                content:
+                  description: 'Flexible JSON object representing the questionnaire content'
+                  type: object
+                  example:
+                    name: eligibility
+                    title: 'Eligibility & Consent'
+                  additionalProperties: true
               type: object
-            example:
-              title: 'Weight Loss'
-              slug: weight-loss
-              content:
-                name: eligibility
-                title: 'Eligibility & Consent'
       responses:
         200:
-          description: 'Returns questionnaire details'
+          description: 'Questionnaire created successfully'
+          content:
+            application/json:
+              schema:
+                properties:
+                  title:
+                    type: string
+                    example: 'Weight Loss'
+                  slug:
+                    type: string
+                    example: weight-lost
+                  content:
+                    description: 'The created questionnaire content'
+                    type: object
+                    example:
+                      title: 'Weight Loss'
+                      slug: weight-loss
+                      content:
+                        name: eligibility
+                        title: 'Eligibility & Consent'
+                    additionalProperties: true
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -446,17 +2926,57 @@ paths:
     get:
       tags:
         - 'Public - Questionnaires'
-      summary: 'Get Questionnaire'
+      summary: 'Get a single questionnaire by its ID'
       operationId: public/get-questionnaire
       parameters:
         -
           name: questionnaire_id
           in: path
-          description: ''
+          description: 'The unique identifier or slug of the questionnaire'
           required: true
+          schema:
+            type: string
+            example: 'efa20b8b-cedb-4c70-a683-7e5ba67af43c or slug'
       responses:
         200:
-          description: 'Returns questionnaire details'
+          description: 'Returns the details of the questionnaire'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        example: efa20b8b-cedb-4c70-a683-7e5ba67af43c
+                      organization_id:
+                        type: string
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      title:
+                        type: string
+                        example: 'weight loss'
+                      slug:
+                        type: string
+                        example: weight-loss
+                      content:
+                        description: 'Nested JSON content of the questionnaire'
+                        type: object
+                        example:
+                          slug: weight-loss
+                          title: 'Weight Loss'
+                          content:
+                            name: eligibility
+                            title: 'Eligibility & Consent'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-24T22:26:14.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-24T22:26:14.000000Z'
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -465,17 +2985,28 @@ paths:
     delete:
       tags:
         - 'Public - Questionnaires'
-      summary: 'Delete Questionnaire'
+      summary: 'Delete a questionnaire by its ID'
       operationId: public/delete-questionnaire
       parameters:
         -
           name: questionnaire_id
           in: path
-          description: ''
+          description: 'The unique identifier of the questionnaire to delete'
           required: true
+          schema:
+            type: string
+            example: 309a06eb-22e2-43b8-baab-c090d4686093
       responses:
         200:
-          description: 'Returns success message'
+          description: 'Successfully deleted the questionnaire'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: success
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -484,19 +3015,23 @@ paths:
     patch:
       tags:
         - 'Public - Questionnaires'
-      summary: 'Update Questionnaire'
+      summary: 'Update an existing questionnaire'
       operationId: public/update-questionnaire
       parameters:
         -
           name: questionnaire_id
           in: path
-          description: ''
+          description: 'The unique identifier of the questionnaire to update'
           required: true
+          schema:
+            type: string
+            example: 309a06eb-22e2-43b8-baab-c090d4686093
       requestBody:
         required: true
         content:
           application/json:
             schema:
+              description: 'Fields for updating the questionnaire. Nested JSON content is supported.'
               type: object
             example:
               title: 'Weight Loss'
@@ -506,7 +3041,44 @@ paths:
                 title: 'Eligibility & Consent'
       responses:
         200:
-          description: 'Returns questionnaire details'
+          description: 'Returns the updated questionnaire details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        example: 309a06eb-22e2-43b8-baab-c090d4686093
+                      organization_id:
+                        type: string
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      title:
+                        type: string
+                        example: 'Weight Loss'
+                      slug:
+                        type: string
+                        example: weight-lost
+                      content:
+                        description: 'Nested JSON content of the questionnaire'
+                        type: object
+                        example:
+                          title: 'Weight Loss'
+                          slug: weight-loss
+                          content:
+                            name: eligibility
+                            title: 'Eligibility & Consent'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T11:01:26.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T11:01:26.000000Z'
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -516,28 +3088,87 @@ paths:
     post:
       tags:
         - 'Public - Questionnaires'
-      summary: 'Submit Answer'
+      summary: 'Submit answers for a specific questionnaire'
       operationId: public/submit-answer
       parameters:
         -
           name: questionnaire_id
           in: path
-          description: ''
+          description: 'The unique identifier of the questionnaire'
           required: true
+          schema:
+            type: string
+            example: 309a06eb-22e2-43b8-baab-c090d4686093
       requestBody:
         required: true
         content:
           application/json:
             schema:
+              properties:
+                answers:
+                  description: 'Key-value pairs representing the answers to the questionnaire'
+                  type: object
+                  example:
+                    first_name: John
+                    last_name: Doe
+                patient_id:
+                  description: 'Optional patient ID associated with the answers'
+                  type: string
+                  example: null
+                  nullable: true
               type: object
-            example:
-              answers:
-                name: a
-                title: b
-              patient_id: null
       responses:
         200:
-          description: 'Returns answer details'
+          description: 'Returns the submitted answers with questionnaire details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        example: e3e5f412-8046-4cf8-adc8-2b278c84dff3
+                      questionnaire_id:
+                        type: string
+                        example: 309a06eb-22e2-43b8-baab-c090d4686093
+                      questionnaire:
+                        properties:
+                          title:
+                            type: string
+                            example: 'Weight Loss'
+                          slug:
+                            type: string
+                            example: weight-loss
+                          content:
+                            properties:
+                              name:
+                                type: string
+                                example: eligibility
+                              title:
+                                type: string
+                                example: 'Eligibility & Consent'
+                            type: object
+                        type: object
+                      answers:
+                        type: object
+                        example:
+                          first_name: John
+                          last_name: Doe
+                      patient_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T11:18:42.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T11:18:42.000000Z'
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -547,17 +3178,70 @@ paths:
     get:
       tags:
         - 'Public - Questionnaire Answer'
-      summary: 'Get Questionnaire Answer By ID'
+      summary: 'Get a specific questionnaire answer by ID'
       operationId: public/get-answer
       parameters:
         -
           name: answer_id
           in: path
-          description: ''
+          description: 'The unique identifier of the submitted answer'
           required: true
+          schema:
+            type: string
+            example: e3e5f412-8046-4cf8-adc8-2b278c84dff3
       responses:
         200:
-          description: 'Returns answer details'
+          description: 'Returns the details of the submitted questionnaire answer'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        example: e3e5f412-8046-4cf8-adc8-2b278c84dff3
+                      questionnaire_id:
+                        type: string
+                        example: 309a06eb-22e2-43b8-baab-c090d4686093
+                      questionnaire:
+                        properties:
+                          title:
+                            type: string
+                            example: 'Weight Loss'
+                          slug:
+                            type: string
+                            example: weight-loss
+                          content:
+                            properties:
+                              name:
+                                type: string
+                                example: eligibility
+                              title:
+                                type: string
+                                example: 'Eligibility & Consent'
+                            type: object
+                        type: object
+                      answers:
+                        description: 'Key-value pairs of the answers submitted'
+                        type: object
+                        example:
+                          first_name: Vince
+                          last_name: Canete
+                      patient_id:
+                        type: string
+                        example: null
+                        nullable: true
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T11:18:42.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-14T11:18:42.000000Z'
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -571,7 +3255,54 @@ paths:
       operationId: /public/getWebhookDetails
       responses:
         200:
-          description: 'Returns list of treatments'
+          description: 'Returns webhook details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: ae3e468f-50dd-430a-9fa2-aa3b61d22548
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      subscribed_url:
+                        type: string
+                        format: uri
+                        example: 'https://example.com/webhook'
+                      events:
+                        type: array
+                        items:
+                          type: string
+                          example: PRESCRIPTION_CREATED
+                      is_active:
+                        type: boolean
+                        example: true
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-13T17:32:50.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-13T17:45:12.000000Z'
+                    type: object
+                type: object
+              example:
+                data:
+                  id: ae3e468f-50dd-430a-9fa2-aa3b61d22548
+                  organization_id: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                  subscribed_url: 'https://example.com/webhook'
+                  events:
+                    - ORDER_STATUS_CHANGED
+                    - PRESCRIPTION_CREATED
+                  is_active: true
+                  created_at: '2025-11-13T17:32:50.000000Z'
+                  updated_at: '2025-11-13T17:45:12.000000Z'
       security:
         -
           ClientIdAuth: []
@@ -587,23 +3318,93 @@ paths:
         content:
           application/json:
             schema:
+              required:
+                - subscriber_url
+                - secret
+                - event_triggers
+                - active
+              properties:
+                subscriber_url:
+                  type: string
+                  example: 'https://quiet-phoenix-96.webhook.cool'
+                secret:
+                  type: string
+                  example: your-secret-key
+                event_triggers:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - ORDER_STATUS_CHANGED
+                      - PRESCRIPTION_CREATED
+                      - PRESCRIPTION_UPDATED
+                      - PRESCRIPTION_STATUS_CHANGED
+                      - ORDER_LINE_STATUS_CHANGED
+                      - PATIENT_CREATED
+                      - PATIENT_UPDATED
+                      - PATIENT_DELETED
+                  example:
+                    - ORDER_STATUS_CHANGED
+                    - PRESCRIPTION_CREATED
+                    - PRESCRIPTION_UPDATED
+                    - PRESCRIPTION_STATUS_CHANGED
+                    - ORDER_LINE_STATUS_CHANGED
+                    - PATIENT_CREATED
+                    - PATIENT_UPDATED
+                    - PATIENT_DELETED
+                active:
+                  type: boolean
+                  example: true
               type: object
-            example:
-              subscriber_url: '23423324'
-              secret: your-secret-key
-              event_triggers:
-                - ORDER_STATUS_CHANGED
-                - PRESCRIPTION_CREATED
-                - PRESCRIPTION_UPDATED
-                - PRESCRIPTION_STATUS_CHANGED
-                - ORDER_LINE_STATUS_CHANGED
-                - PATIENT_CREATED
-                - PATIENT_UPDATED
-                - PATIENT_DELETED
-              active: true
       responses:
         200:
           description: 'Returns webhook details'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: 5327507b-e3c5-447f-8c47-696747e5fd29
+                      organization_id:
+                        type: string
+                        format: uuid
+                        example: 8f419772-1e87-4ed1-9298-4aad6bba9306
+                      subscriber_url:
+                        type: string
+                        example: 'https://quiet-phoenix-96.webhook.cool'
+                      secret:
+                        type: string
+                        example: '123456789'
+                      event_triggers:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - ORDER_STATUS_CHANGED
+                          - PRESCRIPTION_CREATED
+                          - PRESCRIPTION_UPDATED
+                          - PRESCRIPTION_STATUS_CHANGED
+                          - ORDER_LINE_STATUS_CHANGED
+                          - PATIENT_CREATED
+                          - PATIENT_UPDATED
+                          - PATIENT_DELETED
+                      is_active:
+                        type: boolean
+                        example: true
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-10-22T23:07:09.000000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-11-13T19:50:22.000000Z'
+                    type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -612,12 +3413,40 @@ paths:
   /api/public/v1/webhook/events:
     get:
       tags:
-        - 'Public - Order Lines'
-      summary: 'Get Organization Webhooks Events'
-      operationId: /api/public/v1/webhook/events
+        - 'Public - Webhook'
+      summary: 'Get Webhook Events'
+      operationId: public.getWebhookEvents
       responses:
         200:
-          description: 'Returns order line details'
+          description: 'Returns the list of available webhook events'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: ORDER_STATUS_CHANGED
+                        description:
+                          type: string
+                          example: null
+                          nullable: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: '2025-10-22T22:55:49.000000Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: '2025-10-22T22:55:49.000000Z'
+                      type: object
+                type: object
       security:
         -
           ClientIdAuth: []
@@ -637,6 +3466,15 @@ components:
       in: header
 tags:
   -
+    name: 'Public - Cal.com Team'
+    description: 'Public - Cal.com Team'
+  -
+    name: 'Public - Cal.com Bookings'
+    description: 'Public - Cal.com Bookings'
+  -
+    name: 'Public - Cal.com Event Types'
+    description: 'Public - Cal.com Event Types'
+  -
     name: 'Public - Products'
     description: 'Public - Products'
   -
@@ -648,6 +3486,9 @@ tags:
   -
     name: 'Public - Order Lines'
     description: 'Public - Order Lines'
+  -
+    name: 'Public - Organization Delivery Address'
+    description: 'Public - Organization Delivery Address'
   -
     name: 'Public - Patients'
     description: 'Public - Patients'
